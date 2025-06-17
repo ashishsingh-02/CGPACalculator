@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CGPA Calculator</title>
+    <script>
+        function togglePrevCgpa() {
+            const semester = parseInt(document.getElementById("semester").value);
+            const prevInput = document.getElementById("prev_cgpa_container");
+            if (semester > 1) {
+                prevInput.style.display = "block";
+            } else {
+                prevInput.style.display = "none";
+            }
+        }
+
+        function showSubjectInputs() {
+            const num = parseInt(document.getElementById("num_subjects").value);
+            const container = document.getElementById("subject_inputs");
+            container.innerHTML = "";
+            for (let i = 1; i <= num; i++) {
+                container.innerHTML += `
+                    <div>
+                        <label>Subject ${i} Grade (H/S/A/B/C/F/RA/K):</label>
+                        <input name="grade_${i}" required>
+                        <label>Credit:</label>
+                        <input type="number" name="credit_${i}" step="0.1" required>
+                    </div><br>`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>CGPA Calculator</h2>
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    <form method="post">
+        <label>Name:</label>
+        <input name="name" required><br><br>
+
+        <label>Registration Number (12-digit):</label>
+        <input name="reg_no" required pattern="\d{12}" title="12 digit numeric only"><br><br>
+
+        <label>Semester:</label>
+        <input type="number" name="semester" id="semester" required min="1" onchange="togglePrevCgpa()"><br><br>
+
+        <div id="prev_cgpa_container" style="display:none;">
+            <label>Previous CGPA:</label>
+            <input type="number" name="prev_cgpa" step="0.01" min="0" max="10"><br><br>
+        </div>
+
+        <label>Number of Subjects:</label>
+        <input type="number" name="num_subjects" id="num_subjects" required min="1" onchange="showSubjectInputs()"><br><br>
+
+        <div id="subject_inputs"></div>
+
+        <button type="submit">Calculate</button>
+    </form>
+</body>
+</html>
